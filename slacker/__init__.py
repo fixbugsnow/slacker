@@ -99,7 +99,17 @@ class BaseAPI(object):
 
         response = Response(response.text)
         if not response.successful:
-            raise Error(response.error)
+            # show the full error details, so the users knows all the reasons 
+            # behind the error, just like Slack's API "Tester" shows the detailed 
+            # results for errors, e.g. it will now show:
+            # slacker.Error: {
+            # "ok": false,"error": "missing_scope","needed": "users:read","provided": "admin,identify"
+            # }
+            #
+            # instead of just showing "slacker.Error: missing_scope"
+            #
+            # raise Error(response.error)  # commented out this line and added below line
+            raise Error(response.raw)
 
         return response
 
